@@ -2,7 +2,6 @@ import { Encode, Decode, Hash, DownloadData, HumanTime } from "./functions.js"
 import History from "./history.js"
 import WindowDrag from "./windowDrag.js"
 
-const LATEST_VERSION = "1.0.29980"
 const ABILITY_FIELDS = [
     "hasDash",
     "hasWalljump",
@@ -39,7 +38,6 @@ const elements = {
     stats: document.querySelector("#stats"),
     abilityGrid: document.querySelector("#ability-grid"),
     syncGuided: document.querySelector("#sync-guided"),
-    setLatest: document.querySelector("#set-latest"),
     fieldVersion: document.querySelector("#field-version"),
     fieldGeo: document.querySelector("#field-geo"),
     fieldMaxHealth: document.querySelector("#field-max-health"),
@@ -451,11 +449,6 @@ const initialize = () => {
         field.element.addEventListener("change", () => {
             applyGuidedField(field)
         })
-    })
-
-    elements.setLatest.addEventListener("click", () => {
-        elements.fieldVersion.value = LATEST_VERSION
-        applyGuidedField({ element: elements.fieldVersion, path: "playerData.version", type: "string" })
     })
 
     setStatus("Pick a file to begin.", "ok")
