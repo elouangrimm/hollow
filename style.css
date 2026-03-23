@@ -53,6 +53,16 @@ body {
     padding: 2.5rem 1rem 4rem;
 }
 
+body.pwa-installed .pwa-hide {
+    display: none !important;
+}
+
+@media (display-mode: standalone), (display-mode: window-controls-overlay) {
+    .pwa-hide {
+        display: none !important;
+    }
+}
+
 #app {
     width: min(1180px, 100%);
     margin: 0 auto;

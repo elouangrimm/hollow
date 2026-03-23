@@ -57,6 +57,20 @@ const state = {
 const canUseLaunchQueue = "launchQueue" in window
 const canUseServiceWorker = "serviceWorker" in navigator
 
+const isInstalledPwa = () => {
+    const standaloneMedia = window.matchMedia("(display-mode: standalone)").matches
+    const overlayMedia = window.matchMedia("(display-mode: window-controls-overlay)").matches
+    const iosStandalone = window.navigator.standalone === true
+    const androidTwa = document.referrer.startsWith("android-app://")
+    return standaloneMedia || overlayMedia || iosStandalone || androidTwa
+}
+
+const applyPwaUiMode = () => {
+    if (isInstalledPwa()) {
+        document.body.classList.add("pwa-installed")
+    }
+}
+
 const guidedFields = [
     { element: elements.fieldVersion, path: "playerData.version", type: "string" },
     { element: elements.fieldGeo, path: "playerData.geo", type: "number" },
@@ -442,6 +456,7 @@ const scheduleGuidedSync = () => {
 }
 
 const initialize = () => {
+    applyPwaUiMode()
     setupFileHandling()
     registerServiceWorker()
 
@@ -484,7 +499,9 @@ const initialize = () => {
 
     elements.formatJson.addEventListener("click", formatEditorJson)
     elements.reset.addEventListener("click", resetEditor)
-    elements.downloadSwitch.addEventListener("click", downloadSwitch)
+    if (elements.downloadSwitch) {
+        elements.downloadSwitch.addEventListener("click", downloadSwitch)
+    }
     elements.downloadPc.addEventListener("click", downloadPc)
     elements.syncGuided.addEventListener("click", refreshGuidedFields)
 
