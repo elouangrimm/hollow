@@ -14,11 +14,7 @@ const ABILITY_FIELDS = [
     "hasParry",
     "hasHarpoonDash",
     "hasSilkCharge",
-    "hasSilkBomb",
-    "hasSilkBossNeedle",
     "hasNeedolin",
-    "hasNeedolinMemoryPowerup",
-    "hasSilkSpecial",
     "hasChargeSlash"
 ]
 
@@ -220,23 +216,18 @@ const renderStats = (parsed) => {
 
 const renderAbilityEditor = () => {
     const abilityLabels = {
-        hasDash: "Dash",
-        hasWalljump: "Wall Jump",
-        hasDoubleJump: "Double Jump",
-        hasSuperJump: "Super Jump",
-        hasBrolly: "Brolly",
-        hasNeedleThrow: "Needle Throw",
-        hasThreadSphere: "Thread Sphere",
-        hasParry: "Parry",
-        hasHarpoonDash: "Harpoon Dash",
-        hasSilkCharge: "Silk Charge",
-        hasSilkBomb: "Silk Bomb",
-        hasSilkBossNeedle: "Silk Boss Needle",
+        hasDash: "Swift Step (Dash)",
+        hasWalljump: "Cling Grip (Wall Jump)",
+        hasDoubleJump: "Faydown Cloak (Double Jump)",
+        hasSuperJump: "Silk Soar (Super Jump)",
+        hasBrolly: "Drifter’s Cloak",
+        hasNeedleThrow: "Silkspear",
+        hasThreadSphere: "Thread Storm",
+        hasParry: "Cross Stitch (Parry)",
+        hasHarpoonDash: "Clawline",
+        hasSilkCharge: "Sharpdart",
         hasNeedolin: "Needolin",
-        hasNeedolinMemoryPowerup: "Needolin Memory",
-        hasSilkSpecial: "Silk Special",
-        hasChargeSlash: "Charge Slash",
-        hasQuill: "Quill"
+        hasChargeSlash: "Needle Strike"
     }
 
     elements.abilityGrid.innerHTML = ""
