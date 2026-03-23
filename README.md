@@ -1,16 +1,41 @@
-# Hollow 
-## https://bloodorca.github.io/hollow/
-Online save file editor. 
+# Hollow Save Editor
 
-The steps behind decryption and encryption were taken from [@KayDeeTee](https://github.com/KayDeeTee)'s [Hollow Knight Save Manager](https://github.com/KayDeeTee/Hollow-Knight-SaveManager). 
+Static save file editor for Hollow Knight.
 
+## Features
 
-### Instructions 
-1. Make a backup of your save file. In the Hollow Knight save folder, I'll rename `user1.dat` to `user1_a.dat`. 
-1. Select or drag the source save file into the online utility. I will drag in `user1_a.dat` as my source. 
-1. The online editor should show you JSON with `"key": value` pairs. Modify it to your liking. I will change my `"geo"` to `777`. 
-1. Download your new **modified** save file. Once downloaded, I will rename it to "user1.dat" and move it to my Hollow Knight save folder. 
+- Open encrypted PC saves or plain text Switch saves
+- Drag and drop support
+- Raw JSON editor with format/reset actions
+- Guided common value editor for:
+	- `playerData.version` (with `Set latest`)
+	- `playerData.geo`
+	- `playerData.silk`
+	- `playerData.health`
+	- `playerData.maxHealth`
+	- `playerData.date`
+	- `playerData.respawnScene`
+- Local history (stored in browser local storage)
 
+## Run (No Build)
 
-### Where is my save folder?
-The Hollow Knight save folder may be different depending on your OS (windows, mac, linux) and game platform (steam, gog, etc). Google it like so `hollow knight mac steam save file location `. 
+Open `index.html` directly in a browser, or run a tiny static server:
+
+```bash
+srv-it
+```
+
+(pssst: check out [srv-it](https://www.npmjs.com/package/srv-it))
+
+Then open `http://localhost:8080`.
+
+## Usage
+
+1. Make a backup of your save.
+2. Select or drag your source file into the app.
+3. Edit JSON directly or use the quick values panel.
+4. Download as `plain.dat` for Switch or `user1.dat` for PC.
+
+## Credits
+
+The decryption and encryption process is based on work from [@KayDeeTee](https://github.com/KayDeeTee) in [Hollow Knight Save Manager](https://github.com/KayDeeTee/Hollow-Knight-SaveManager).

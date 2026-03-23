@@ -1,7 +1,6 @@
 import { Encode, Decode, Hash, DownloadData, HumanTime } from "./functions.js"
 import History from "./history.js"
 import WindowDrag from "./windowDrag.js"
-import "./style.css"
 
 const LATEST_VERSION = "1.0.29980"
 
