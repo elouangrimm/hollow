@@ -3,6 +3,24 @@ import History from "./history.js"
 import WindowDrag from "./windowDrag.js"
 
 const LATEST_VERSION = "1.0.29980"
+const ABILITY_FIELDS = [
+    "hasDash",
+    "hasWalljump",
+    "hasDoubleJump",
+    "hasSuperJump",
+    "hasBrolly",
+    "hasNeedleThrow",
+    "hasThreadSphere",
+    "hasParry",
+    "hasHarpoonDash",
+    "hasSilkCharge",
+    "hasSilkBomb",
+    "hasSilkBossNeedle",
+    "hasNeedolin",
+    "hasNeedolinMemoryPowerup",
+    "hasSilkSpecial",
+    "hasChargeSlash"
+]
 
 const history = new History()
 const windowDrag = new WindowDrag()
@@ -22,15 +40,14 @@ const elements = {
     downloadPc: document.querySelector("#download-pc"),
     historySection: document.querySelector("#history"),
     historyList: document.querySelector("#history-list"),
+    stats: document.querySelector("#stats"),
+    abilityGrid: document.querySelector("#ability-grid"),
     syncGuided: document.querySelector("#sync-guided"),
     setLatest: document.querySelector("#set-latest"),
     fieldVersion: document.querySelector("#field-version"),
     fieldGeo: document.querySelector("#field-geo"),
-    fieldSilk: document.querySelector("#field-silk"),
-    fieldHealth: document.querySelector("#field-health"),
     fieldMaxHealth: document.querySelector("#field-max-health"),
-    fieldDate: document.querySelector("#field-date"),
-    fieldRespawn: document.querySelector("#field-respawn")
+    fieldMaxSilk: document.querySelector("#field-max-silk")
 }
 
 const state = {
@@ -45,11 +62,8 @@ const state = {
 const guidedFields = [
     { element: elements.fieldVersion, path: "playerData.version", type: "string" },
     { element: elements.fieldGeo, path: "playerData.geo", type: "number" },
-    { element: elements.fieldSilk, path: "playerData.silk", type: "number" },
-    { element: elements.fieldHealth, path: "playerData.health", type: "number" },
     { element: elements.fieldMaxHealth, path: "playerData.maxHealth", type: "number" },
-    { element: elements.fieldDate, path: "playerData.date", type: "string" },
-    { element: elements.fieldRespawn, path: "playerData.respawnScene", type: "string" }
+    { element: elements.fieldMaxSilk, path: "playerData.silkMax", type: "number" }
 ]
 
 const setStatus = (message, tone = "ok") => {
@@ -103,6 +117,16 @@ const refreshGuidedFields = () => {
         field.element.value = value == null ? "" : String(value)
     })
 
+    ABILITY_FIELDS.forEach((ability) => {
+        const checkbox = document.querySelector(`#ability-${ability}`)
+        if (!checkbox) {
+            return
+        }
+        checkbox.checked = Boolean(getByPath(parsed, `playerData.${ability}`))
+    })
+
+    renderStats(parsed)
+
     setStatus("JSON synced.", "ok")
 }
 
@@ -131,7 +155,108 @@ const applyGuidedField = (field) => {
     const formatted = JSON.stringify(parsed, null, 2)
     state.gameFile = formatted
     elements.editor.value = formatted
+    renderStats(parsed)
     setStatus(`Updated ${field.path}.`, "ok")
+}
+
+const applyAbilityField = (abilityName, isEnabled) => {
+    const parsed = safeParseEditor()
+    if (!parsed) {
+        setStatus("Fix JSON before editing abilities.", "error")
+        return
+    }
+
+    setByPath(parsed, `playerData.${abilityName}`, Boolean(isEnabled))
+    const formatted = JSON.stringify(parsed, null, 2)
+    state.gameFile = formatted
+    elements.editor.value = formatted
+    renderStats(parsed)
+    setStatus(`Updated playerData.${abilityName}.`, "ok")
+}
+
+const formatPlayTime = (value) => {
+    const numeric = Number(value)
+    if (!Number.isFinite(numeric) || numeric < 0) {
+        return "unknown"
+    }
+
+    const totalSeconds = Math.floor(numeric)
+    const hours = Math.floor(totalSeconds / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
+    const hoursText = hours.toString()
+    const minutesText = minutes.toString().padStart(2, "0")
+    const secondsText = seconds.toString().padStart(2, "0")
+    return `${hoursText}:${minutesText}:${secondsText}`
+}
+
+const statBlock = (label, value, iconPath = "", iconPath2 = "") => {
+    const icon = iconPath ? `<img src="${iconPath}" alt="" class="stat-icon">` : ""
+    const icon2 = iconPath2 ? `<img src="${iconPath2}" alt="" class="stat-icon">` : ""
+    return `<div class="stat-card">${icon}${icon2}<div><div class="stat-label">${label}</div><div class="stat-value">${value}</div></div></div>`
+}
+
+const renderStats = (parsed) => {
+    const playerData = parsed && parsed.playerData ? parsed.playerData : {}
+    const geo = playerData.geo ?? 0
+    const rosaries = playerData.PreMemoryState && Number.isFinite(playerData.PreMemoryState.Rosaries)
+        ? playerData.PreMemoryState.Rosaries
+        : 0
+    const silk = playerData.silk ?? 0
+    const silkMax = playerData.silkMax ?? 0
+    const health = playerData.health ?? 0
+    const maxHealth = playerData.maxHealth ?? 0
+    const playTime = formatPlayTime(playerData.playTime)
+    const version = playerData.version || "unknown"
+
+    elements.stats.innerHTML = [
+        statBlock("Geo/Rosaries", geo, "assets/geo.png", "assets/rosary.png"),
+        statBlock("Health", `${health}/${maxHealth}`),
+        statBlock("Silk", `${silk}/${silkMax}`),
+        statBlock("Play Time", playTime),
+        statBlock("Version", version)
+    ].join("")
+}
+
+const renderAbilityEditor = () => {
+    const abilityLabels = {
+        hasDash: "Dash",
+        hasWalljump: "Wall Jump",
+        hasDoubleJump: "Double Jump",
+        hasSuperJump: "Super Jump",
+        hasBrolly: "Brolly",
+        hasNeedleThrow: "Needle Throw",
+        hasThreadSphere: "Thread Sphere",
+        hasParry: "Parry",
+        hasHarpoonDash: "Harpoon Dash",
+        hasSilkCharge: "Silk Charge",
+        hasSilkBomb: "Silk Bomb",
+        hasSilkBossNeedle: "Silk Boss Needle",
+        hasNeedolin: "Needolin",
+        hasNeedolinMemoryPowerup: "Needolin Memory",
+        hasSilkSpecial: "Silk Special",
+        hasChargeSlash: "Charge Slash",
+        hasQuill: "Quill"
+    }
+
+    elements.abilityGrid.innerHTML = ""
+    ABILITY_FIELDS.forEach((ability) => {
+        const row = document.createElement("label")
+        row.className = "ability-item"
+
+        const checkbox = document.createElement("input")
+        checkbox.type = "checkbox"
+        checkbox.id = `ability-${ability}`
+        checkbox.addEventListener("change", () => {
+            applyAbilityField(ability, checkbox.checked)
+        })
+
+        const text = document.createElement("span")
+        text.textContent = abilityLabels[ability] || ability
+
+        row.append(checkbox, text)
+        elements.abilityGrid.append(row)
+    })
 }
 
 const openEditor = (jsonString, fileName) => {
@@ -245,27 +370,37 @@ const resetEditor = () => {
     setStatus("Editor reset to original file content.", "ok")
 }
 
-const downloadSwitch = () => {
+const downloadSwitch = async () => {
     const parsed = safeParseEditor()
     if (!parsed) {
         setStatus("Could not parse valid JSON.", "error")
         return
     }
 
-    DownloadData(JSON.stringify(parsed), "plain.dat")
-    setStatus("Downloaded plain Switch save.", "ok")
+    const fileName = state.gameFileName || "save.dat"
+    const saved = await DownloadData(JSON.stringify(parsed), fileName, { saveAs: true })
+    if (saved) {
+        setStatus(`Downloaded ${fileName}.`, "ok")
+    } else {
+        setStatus("Save dialog was cancelled.", "warn")
+    }
 }
 
-const downloadPc = () => {
+const downloadPc = async () => {
     const parsed = safeParseEditor()
     if (!parsed) {
         setStatus("Could not parse valid JSON.", "error")
         return
     }
 
+    const fileName = state.gameFileName || "save.dat"
     const encrypted = Encode(JSON.stringify(parsed))
-    DownloadData(encrypted, "user1.dat")
-    setStatus("Downloaded encrypted PC save.", "ok")
+    const saved = await DownloadData(encrypted, fileName, { saveAs: true })
+    if (saved) {
+        setStatus(`Downloaded ${fileName}.`, "ok")
+    } else {
+        setStatus("Save dialog was cancelled.", "warn")
+    }
 }
 
 const scheduleGuidedSync = () => {
@@ -278,6 +413,7 @@ const scheduleGuidedSync = () => {
 }
 
 const initialize = () => {
+    renderAbilityEditor()
     history.onChange = renderHistory
     renderHistory()
 

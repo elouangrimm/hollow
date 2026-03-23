@@ -74,6 +74,19 @@ body {
     padding: 1.25rem;
 }
 
+.hero-title {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+}
+
+.hero-char {
+    width: clamp(72px, 9vw, 110px);
+    height: auto;
+    image-rendering: auto;
+}
+
 .eyebrow {
     margin-bottom: 0.45rem;
     color: var(--text-faint);
@@ -104,6 +117,23 @@ h2 {
 .lede {
     max-width: 68ch;
     color: var(--text-muted);
+}
+
+.locations-intro {
+    margin-top: 0.9rem;
+    color: var(--text-muted);
+}
+
+.locations {
+    margin-top: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.locations h2 {
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
 }
 
 .rules {
@@ -226,6 +256,34 @@ input[type="checkbox"] {
     gap: 0.4rem;
 }
 
+.subhead {
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.ability-grid {
+    display: grid;
+    gap: 0.35rem;
+    grid-template-columns: 1fr;
+}
+
+.ability-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.ability-item input {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+}
+
 #sync-guided {
     margin-top: 0.4rem;
 }
@@ -234,6 +292,39 @@ input[type="checkbox"] {
     padding: 1rem;
     display: grid;
     gap: 0.75rem;
+}
+
+.stats {
+    display: grid;
+    gap: 0.45rem;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+    background-color: var(--bg-surface);
+    padding: 0.5rem;
+}
+
+.stat-label {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    color: var(--text-bright);
+    font-weight: 600;
+}
+
+.stat-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 }
 
 .editor-head {
@@ -304,6 +395,16 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 920px) {
+    .hero-title {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .locations {
+        grid-template-columns: 1fr;
+    }
+
     .workspace {
         grid-template-columns: 1fr;
     }

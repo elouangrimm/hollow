@@ -134,12 +134,42 @@ export function HumanTime(date){
     return `about ${round(years, 1)} years ago`
 }
 
-export function DownloadData(data, fileName){
+export async function DownloadData(data, fileName, options = {}){
+    const saveAs = Boolean(options.saveAs)
+    const mimeType = options.mimeType || "application/octet-stream"
+
+    if (saveAs && typeof window.showSaveFilePicker === "function") {
+        try {
+            const handle = await window.showSaveFilePicker({
+                suggestedName: fileName,
+                types: [{
+                    description: "Save files",
+                    accept: {
+                        [mimeType]: [".dat", ".bak", ".json", ".txt"]
+                    }
+                }]
+            })
+
+            const writable = await handle.createWritable()
+            await writable.write(new Blob([data], { type: mimeType }))
+            await writable.close()
+            return true
+        } catch (error) {
+            if (error && error.name === "AbortError") {
+                return false
+            }
+            console.warn(error)
+        }
+    }
+
+    const url = window.URL.createObjectURL(new Blob([data], { type: mimeType }))
     var a = document.createElement("a")
-    a.setAttribute("href", window.URL.createObjectURL(new Blob([data], {type: "octet/stream"})));
-    a.setAttribute('download', fileName)
-    a.setAttribute('style', `position: fixed; opacity: 0; left: 0; top: 0;`)
+    a.setAttribute("href", url)
+    a.setAttribute("download", fileName)
+    a.setAttribute("style", "position: fixed; opacity: 0; left: 0; top: 0;")
     document.body.append(a)
     a.click()
     document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+    return true
 }

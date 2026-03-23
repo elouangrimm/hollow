@@ -1,4 +1,4 @@
-const LOCAL_STORAGE_NAME = "bloodorca@hollow"
+const LOCAL_STORAGE_NAME = "elouanxyz@hollow"
 
 export default class History {
   constructor(){
