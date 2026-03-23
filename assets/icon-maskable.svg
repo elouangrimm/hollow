@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Hollow Save Editor maskable icon</title>
+  <desc id="desc">Mask-safe icon with centered hollow square motif.</desc>
+  <rect width="512" height="512" fill="#171414"/>
+  <g transform="translate(64 64)">
+    <rect x="32" y="32" width="320" height="320" fill="none" stroke="#f1eded" stroke-width="34"/>
+    <rect x="126" y="126" width="132" height="132" fill="#171414" stroke="#f1eded" stroke-width="18"/>
+  </g>
+</svg>

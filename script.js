@@ -54,6 +54,9 @@ const state = {
     syncTimer: null
 }
 
+const canUseLaunchQueue = "launchQueue" in window
+const canUseServiceWorker = "serviceWorker" in navigator
+
 const guidedFields = [
     { element: elements.fieldVersion, path: "playerData.version", type: "string" },
     { element: elements.fieldGeo, path: "playerData.geo", type: "number" },
@@ -297,12 +300,10 @@ const renderHistory = () => {
     })
 }
 
-const handleFileChange = (files) => {
-    if (!files || files.length === 0) {
+const loadSaveFile = (file) => {
+    if (!file) {
         return
     }
-
-    const file = files[0]
     const reader = new FileReader()
 
     if (state.switchMode) {
@@ -331,6 +332,47 @@ const handleFileChange = (files) => {
 
         elements.fileInput.value = ""
     })
+}
+
+const handleFileChange = (files) => {
+    if (!files || files.length === 0) {
+        return
+    }
+    loadSaveFile(files[0])
+}
+
+const setupFileHandling = () => {
+    if (!canUseLaunchQueue) {
+        return
+    }
+
+    launchQueue.setConsumer(async (launchParams) => {
+        if (!launchParams.files || launchParams.files.length === 0) {
+            return
+        }
+
+        try {
+            const fileHandle = launchParams.files[0]
+            const file = await fileHandle.getFile()
+            loadSaveFile(file)
+            setStatus(`Opened ${file.name} from the OS launcher.`, "ok")
+        } catch (error) {
+            console.warn(error)
+            setStatus("Could not open the launched file from the OS.", "error")
+        }
+    })
+}
+
+const registerServiceWorker = async () => {
+    if (!canUseServiceWorker || !window.isSecureContext) {
+        return
+    }
+
+    try {
+        await navigator.serviceWorker.register("./sw.js")
+    } catch (error) {
+        console.warn("Service worker registration failed", error)
+    }
 }
 
 const formatEditorJson = () => {
@@ -400,6 +442,9 @@ const scheduleGuidedSync = () => {
 }
 
 const initialize = () => {
+    setupFileHandling()
+    registerServiceWorker()
+
     renderAbilityEditor()
     history.onChange = renderHistory
     renderHistory()

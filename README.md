@@ -15,6 +15,8 @@ Static save file editor for Hollow Knight and Silksong.
 - Common ability checkboxes (`hasDash`, `hasSuperJump`, `hasDoubleJump`, etc.)
 - Extracted stats panel above JSON editor (Geo, Rosaries, Health, Silk, Play Time, Version)
 - Local history (stored in browser local storage)
+- Installable PWA (offline shell cache)
+- File handling for `.dat` on supporting Chromium browsers when installed
 
 ## Run (No Build)
 
@@ -27,6 +29,20 @@ srv-it
 (pssst: check out [srv-it](https://www.npmjs.com/package/srv-it))
 
 Then open `http://localhost:3000` or whatever port you picked.
+
+## PWA Setup (Kubuntu + Dolphin)
+
+To open `.dat` files directly from Dolphin into this app:
+
+1. Deploy the app on HTTPS (already true on `https://hollow.e5g.dev`).
+2. Open the site in Chromium/Chrome/Edge and install it as an app.
+3. In KDE System Settings, set the `.dat` file association to the installed app entry.
+4. Double-clicking a `.dat` now launches the installed app with the file.
+
+Notes:
+
+- File handling is an installed-app feature (not regular browser tabs).
+- Best support is Chromium-based browsers.
 
 ## Expected Save Locations
 

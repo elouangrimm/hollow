@@ -1,0 +1,39 @@
+{
+  "id": "/",
+  "name": "Hollow Knight Save Editor",
+  "short_name": "Hollow Save",
+  "description": "Edit, validate, and convert Hollow Knight and Silksong save files.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1a1818",
+  "theme_color": "#1a1818",
+  "icons": [
+    {
+      "src": "assets/icon-any.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/",
+      "name": "Hollow save file",
+      "accept": {
+        "application/octet-stream": [
+          ".dat"
+        ],
+        "application/x-hollow-save": [
+          ".dat"
+        ]
+      }
+    }
+  ]
+}
