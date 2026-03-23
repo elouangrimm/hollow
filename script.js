@@ -41,7 +41,8 @@ const elements = {
     fieldVersion: document.querySelector("#field-version"),
     fieldGeo: document.querySelector("#field-geo"),
     fieldMaxHealth: document.querySelector("#field-max-health"),
-    fieldMaxSilk: document.querySelector("#field-max-silk")
+    fieldMaxSilk: document.querySelector("#field-max-silk"),
+    fieldNailDamage: document.querySelector("#field-nail-damage")
 }
 
 const state = {
@@ -57,7 +58,8 @@ const guidedFields = [
     { element: elements.fieldVersion, path: "playerData.version", type: "string" },
     { element: elements.fieldGeo, path: "playerData.geo", type: "number" },
     { element: elements.fieldMaxHealth, path: "playerData.maxHealth", type: "number" },
-    { element: elements.fieldMaxSilk, path: "playerData.silkMax", type: "number" }
+    { element: elements.fieldMaxSilk, path: "playerData.silkMax", type: "number" },
+    { element: elements.fieldNailDamage, path: "playerData.nailDamage", type: "number" }
 ]
 
 const setStatus = (message, tone = "ok") => {
@@ -196,17 +198,13 @@ const renderStats = (parsed) => {
     const rosaries = playerData.PreMemoryState && Number.isFinite(playerData.PreMemoryState.Rosaries)
         ? playerData.PreMemoryState.Rosaries
         : 0
-    const silk = playerData.silk ?? 0
-    const silkMax = playerData.silkMax ?? 0
-    const health = playerData.health ?? 0
-    const maxHealth = playerData.maxHealth ?? 0
+    const nailDamage = playerData.nailDamage ?? 0
     const playTime = formatPlayTime(playerData.playTime)
     const version = playerData.version || "unknown"
 
     elements.stats.innerHTML = [
         statBlock("Geo/Rosaries", geo, "assets/geo.png", "assets/rosary.png"),
-        statBlock("Health", `${health}/${maxHealth}`),
-        statBlock("Silk", `${silk}/${silkMax}`),
+        statBlock("Nail Upgrades", nailDamage),
         statBlock("Play Time", playTime),
         statBlock("Version", version)
     ].join("")
