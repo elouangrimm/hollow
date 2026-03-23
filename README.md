@@ -26,7 +26,7 @@ Open `index.html` directly in a browser, or run a tiny static server:
 srv-it
 ```
 
-(pssst: check out [srv-it](https://www.npmjs.com/package/srv-it))
+(pssst: check out [srv-it](https://www.npmjs.com/package/srv-it)!)
 
 Then open `http://localhost:3000` or whatever port you picked.
 
